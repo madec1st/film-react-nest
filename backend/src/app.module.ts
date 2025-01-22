@@ -4,7 +4,7 @@ import { OrderModule } from './order/order.module';
 import { FilmsModule } from './films/films.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
-import * as path from 'node:path';
+import * as path from 'path';
 
 import { configProvider } from './app.config.provider';
 import { FilmsController } from './films/films.controller';
@@ -21,7 +21,7 @@ import { OrderService } from './order/order.service';
     // @todo: Добавьте раздачу статических файлов из public
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
-      serveRoot: '/content/afisha/',
+      renderPath: '/content/afisha/',
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     FilmsModule,

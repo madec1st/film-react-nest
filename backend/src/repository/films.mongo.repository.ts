@@ -22,10 +22,10 @@ export default class FilmsMongoRepository implements IFilmsRepository {
   }
 
   async findById(id: string): Promise<FilmDTO> {
-    const film = await this.filmModel.findById(id).exec();
+    const film = await this.filmModel.findOne({ id }).exec();
 
     if (!film) {
-      throw new NotFoundException(`Film does not found`);
+      throw new NotFoundException(`Film does not found (mongo)`);
     }
 
     return film;
@@ -33,7 +33,7 @@ export default class FilmsMongoRepository implements IFilmsRepository {
 
   async updateFilm(film: FilmDTO): Promise<FilmDTO> {
     const updatedFilm = await this.filmModel
-      .findByIdAndUpdate(film.id, film, { new: true })
+      .findOneAndUpdate({ id: film.id }, film, { new: true })
       .exec();
 
     if (!updatedFilm) {
