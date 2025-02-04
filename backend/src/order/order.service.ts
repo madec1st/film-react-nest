@@ -2,17 +2,21 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
+  Inject,
 } from '@nestjs/common';
 import { IFilmsRepository } from '../repository/films.repository.interface';
 import { OrderDTO } from './dto/order.dto';
-import FilmsMongoRepository from '../repository/films.mongo.repository';
+import FilmsMongoRepository from 'src/repository/films.mongo.repository';
 
 @Injectable()
 export class OrderService {
-  private filmsRepository: IFilmsRepository;
+  private activeRepository: IFilmsRepository;
 
-  constructor(private readonly filmsMongoRepository: FilmsMongoRepository) {
-    this.filmsRepository = this.filmsMongoRepository;
+  constructor(
+    @Inject('FilmsRepository')
+    private readonly filmsRepository: IFilmsRepository,
+  ) {
+    this.activeRepository = this.filmsRepository;
   }
 
   async reserveSeat(orderDTO: OrderDTO) {
@@ -22,23 +26,36 @@ export class OrderService {
     for (const ticket of tickets) {
       const { film, session, row, seat } = ticket;
       const selectedPlace = `${row}:${seat}`;
-      const selectedFilm = await this.filmsRepository.findById(film);
+      let selectedFilm;
+
+      this.activeRepository instanceof FilmsMongoRepository
+        ? (selectedFilm = await this.activeRepository.findById(film))
+        : (selectedFilm = await this.activeRepository.findById(film, [
+            'schedule',
+          ]));
 
       if (!selectedFilm) {
         throw new NotFoundException(`Film with session ${film} not found`);
       }
 
       const schedule = selectedFilm.schedule.find((s) => s.id === session);
+      let taken = schedule.taken;
 
       if (!schedule) {
         throw new NotFoundException(`Film does not have session by ${session}`);
       }
 
-      if (schedule.taken.includes(selectedPlace)) {
+      if (!Array.isArray(taken)) {
+        taken = taken ? [taken] : [];
+      }
+
+      if (taken.includes(selectedPlace)) {
         throw new ConflictException(
           `Seat ${selectedPlace} is not available to reserve`,
         );
       }
+
+      taken.push(selectedPlace);
 
       reservedTickets.push({
         film,
@@ -47,7 +64,7 @@ export class OrderService {
         seat,
       });
 
-      await this.filmsRepository.updateFilm(selectedFilm);
+      await this.activeRepository.updateFilm(selectedFilm);
 
       return reservedTickets;
     }

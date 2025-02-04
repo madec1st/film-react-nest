@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Film } from '../films/film.schema';
 import { Model } from 'mongoose';
-import { FilmDTO, ScheduleDTO } from '../films/dto/films.dto';
+import { FilmDTO } from '../films/dto/films.dto';
+import { ScheduleDTO } from '../films/dto/schedule.dto';
 import { IFilmsRepository } from './films.repository.interface';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -25,7 +26,7 @@ export default class FilmsMongoRepository implements IFilmsRepository {
     const film = await this.filmModel.findOne({ id }).exec();
 
     if (!film) {
-      throw new NotFoundException(`Film does not found (mongo)`);
+      throw new NotFoundException(`Film does not found`);
     }
 
     return film;

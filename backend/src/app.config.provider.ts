@@ -5,8 +5,8 @@ export const configProvider = {
   provide: 'CONFIG',
   useValue: <AppConfig>{
     database: {
-      driver: process.env.DATABASE_DRIVER || 'mongodb',
-      url: process.env.DATABASE_URL || 'mongodb://localhost:27017/prac',
+      driver: process.env.DATABASE_DRIVER,
+      url: process.env.DATABASE_URL,
     },
   },
 };
@@ -16,6 +16,6 @@ export interface AppConfig {
 }
 
 export interface AppConfigDatabase {
-  driver: string;
+  driver: 'mongodb' | 'postgres';
   url: string;
 }
