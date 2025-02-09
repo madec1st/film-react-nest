@@ -17,22 +17,18 @@ export class FilmsService {
   }
 
   async findAll(): Promise<FilmDTO[] | Film[]> {
-    const films = await this.activeRepository.findAll();
-    return films;
+    return await this.activeRepository.findAll();
   }
 
   async findById(id: string): Promise<FilmDTO | Film> {
-    const film = await this.activeRepository.findById(id);
-    return film;
+    return await this.activeRepository.findById(id);
   }
 
   async updateFilm(film: FilmDTO | Film): Promise<FilmDTO | Film> {
-    const filmToUpdate = await this.activeRepository.updateFilm(film);
-    return filmToUpdate;
+    return await this.activeRepository.updateFilm(film);
   }
 
   async getFilmSchedule(id: string): Promise<ScheduleDTO[] | Schedule[]> {
-    const schedule = await this.activeRepository.getFilmSchedule(id);
-    return schedule;
+    return await this.activeRepository.getFilmSchedule(id);
   }
 }
