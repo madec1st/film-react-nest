@@ -11,6 +11,9 @@ import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { OrderService } from './order/order.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Film } from './films/entities/films.entity';
+import { Schedule } from './films/entities/schedule.entity';
 
 @Module({
   imports: [
@@ -23,7 +26,18 @@ import { OrderService } from './order/order.service';
       rootPath: path.join(__dirname, '..', 'public'),
       renderPath: '/content/afisha/',
     }),
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    process.env.DATABASE_DRIVER === 'mongodb'
+      ? MongooseModule.forRoot(process.env.DATABASE_URL)
+      : TypeOrmModule.forRoot({
+          type: 'postgres',
+          host: process.env.DATABASE_HOST,
+          port: parseInt(process.env.DATABASE_PORT, 10),
+          username: process.env.DATABASE_USER,
+          password: process.env.DATABASE_PASSWORD,
+          database: process.env.DATABASE_NAME,
+          entities: [Film, Schedule],
+          synchronize: false,
+        }),
     FilmsModule,
     OrderModule,
   ],
