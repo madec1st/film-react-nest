@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { IFilmsRepository } from '../repository/films.repository.interface';
 import { OrderDTO } from './dto/order.dto';
-import FilmsMongoRepository from 'src/repository/films.mongo.repository';
+import FilmsMongoRepository from '../repository/films.mongo.repository';
 
 @Injectable()
 export class OrderService {
