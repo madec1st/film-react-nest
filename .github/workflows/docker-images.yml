@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./frontend
-          file: Dockerfile.frontend
+          file: ./frontend/Dockerfile.frontend
           push: true
           tags: ghcr.io/madec1st/film-react-nest/frontend:latest
 
@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./backend
-          file: Dockerfile.backend
+          file: ./backend/Dockerfile.backend
           push: true
           tags: ghcr.io/madec1st/film-react-nest/backend:latest
