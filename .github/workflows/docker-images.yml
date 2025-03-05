@@ -33,7 +33,12 @@ jobs:
           context: .
           file: ./frontend/Dockerfile.frontend
           push: true
-          tags: ghcr.io/madec1st/film-react-nest/frontend:latest
+          tags: 
+            ghcr.io/madec1st/film-react-nest/frontend:latest
+            ghcr.io/madec1st/film-react-nest/frontend:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+
+  
 
       - name: Build and push backend image
         uses: docker/build-push-action@v3
@@ -41,4 +46,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile.backend
           push: true
-          tags: ghcr.io/madec1st/film-react-nest/backend:latest
+          tags: 
+            ghcr.io/madec1st/film-react-nest/backend:latest
+            ghcr.io/madec1st/film-react-nest/backend:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
