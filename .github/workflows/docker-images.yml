@@ -30,7 +30,7 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v3
         with:
-          context: ./frontend
+          context: .
           file: ./frontend/Dockerfile.frontend
           push: true
           tags: ghcr.io/madec1st/film-react-nest/frontend:latest
