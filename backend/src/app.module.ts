@@ -30,11 +30,11 @@ import { Schedule } from './films/entities/schedule.entity';
       ? MongooseModule.forRoot(process.env.DATABASE_URL)
       : TypeOrmModule.forRoot({
           type: 'postgres',
-          host: process.env.DATABASE_HOST,
+          host: `${process.env.DATABASE_HOST}`,
           port: parseInt(process.env.DATABASE_PORT, 10),
-          username: process.env.DATABASE_USER,
-          password: process.env.DATABASE_PASSWORD,
-          database: process.env.DATABASE_NAME,
+          username: `${process.env.DATABASE_USER}`,
+          password: `${process.env.DATABASE_PASSWORD}`,
+          database: `${process.env.DATABASE_NAME}`,
           entities: [Film, Schedule],
           synchronize: false,
         }),

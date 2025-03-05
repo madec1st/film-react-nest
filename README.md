@@ -1,5 +1,8 @@
 # FILM!
 
+### Адрес приложения
+http://madec.film.nomorepartiessbs.ru/
+
 ## Установка
 
 ### MongoDB

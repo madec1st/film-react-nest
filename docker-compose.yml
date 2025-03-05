@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile.frontend
+    ports:
+      - "80:80"
+    volumes:
+      - frontend_data:/usr/share/nginx/html
+    networks:
+      - film-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - film-network
+
+  db:
+    image: postgres:latest
+    env_file:
+      - ./db/.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - film-network
+    
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ./pg_admin/.env      
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - film-network
+
+networks:
+    film-network:
+      driver: bridge
+
+volumes:
+  frontend_data:
+  pgdata:
